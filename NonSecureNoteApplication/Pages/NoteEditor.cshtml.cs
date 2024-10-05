@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using NonSecureNoteApplication.Helpers;
 using NonSecureNoteApplication.Interfaces;
 using NonSecureNoteApplication.Models;
-using NonSecureNoteApplication.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NonSecureNoteApplication.Pages
 {
@@ -22,6 +19,8 @@ namespace NonSecureNoteApplication.Pages
 
         public IActionResult OnGet()
         {
+            DataModel = NoteService.GetNote("Example Note");
+
             return Page();
         }
 
@@ -39,7 +38,7 @@ namespace NonSecureNoteApplication.Pages
                     //ErrorMessage = e.Message;
                 }
 
-                //return RedirectToPage("/Members/Index");
+                //return RedirectToPage("/Index");
             }
 
             return Page();
