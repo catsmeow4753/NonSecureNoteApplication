@@ -1,6 +1,111 @@
 ﻿@page
 @model NonSecureNoteApplication.Pages.NoteEditorModel
 @{
+    ViewData["Title"] = "NoteEditor";
 }
 
-<h3>Hi</h3>
+<h1>NoteEditor</h1>
+<div class="mb-3">
+    <h3>Add New Note</h3>
+    <input type="text" id="newNoteTitle" class="form-control" placeholder="Note Title" />
+    <textarea id="newNoteBody" class="form-control" placeholder="Note Body"></textarea>
+    <button class="btn btn-success mt-2" onclick="addNote()">Add Note</button>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Body</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var note in Model.Notes)
+        {
+            <tr>
+                <td>
+                    <input type="text" class="form-control" value="@note.Title"
+                           data-note-id="@note.Id" onchange="updateNoteTitle(this)" />
+                </td>
+                <td>
+                    <textarea class="form-control"
+                              data-note-id="@note.Id"
+                              onchange="updateNoteBody(this)">@note.Body</textarea>
+                </td>
+                <td>
+                    <button class="btn btn-primary" onclick="shareNote(@note.Id)">Share</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function addNote() {
+            var title = document.getElementById('newNoteTitle').value;
+            var body = document.getElementById('newNoteBody').value;
+
+            fetch(`/NoteEditor?handler=OnPostAddNote`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title: title, body: body })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Failed to add note.');
+                })
+                .then(note => {
+                    // Add the new note to the table
+                    var tableBody = document.querySelector('tbody');
+                    var newRow = tableBody.insertRow();
+                    newRow.innerHTML = `
+                            <td><input type="text" class="form-control" value="${note.title}" data-note-id="${note.id}" onchange="updateNoteTitle(this)" /></td>
+                            <td><textarea class="form-control" data-note-id="${note.id}" onchange="updateNoteBody(this)">${note.body}</textarea></td>
+                            <td><button class="btn btn-primary" onclick="shareNote(${note.id})">Share</button></td>
+                        `;
+                    // Clear input fields
+                    document.getElementById('newNoteTitle').value = '';
+                    document.getElementById('newNoteBody').value = '';
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        function updateNoteTitle(input) {
+            var noteId = input.getAttribute('data-note-id');
+            var newTitle = input.value;
+
+            fetch(`/NoteEditor/EditTitle/${noteId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title: newTitle })
+            });
+        }
+
+        function updateNoteBody(textarea) {
+            var noteId = textarea.getAttribute('data-note-id');
+            var newBody = textarea.value;
+
+            fetch(`/NoteEditor/EditBody/${noteId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ body: newBody })
+            });
+        }
+
+        function shareNote(noteId) {
+            // Logic for sharing the note (e.g., via email or social media)
+            alert(`Note ${noteId} shared!`);
+        }
+    </script>
+}
