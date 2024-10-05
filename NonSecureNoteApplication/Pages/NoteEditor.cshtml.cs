@@ -10,7 +10,6 @@ namespace NonSecureNoteApplication.Pages
 {
     public class NoteEditorModel : PageModel
     {
-        //private FileHandler FileHandler = new FileHandler();
         private INoteService NoteService;
 
         [BindProperty]
@@ -18,7 +17,6 @@ namespace NonSecureNoteApplication.Pages
 
         public NoteEditorModel(INoteService noteService)
         {
-            //FileHandler = fileHandler;
             NoteService = noteService;
         }
 

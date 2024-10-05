@@ -4,21 +4,22 @@
 	ViewData["Title"] = "NoteEditor";
 }
 
-<h3>Hi</h3>
+<h3>Note Editor</h3>
 
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="@Model.DataModel.TitleText" class="control-label"></label>
+                <input asp-for="@Model.DataModel.TitleText" class="form-control" />
+            </div>
+            <div class="form-group">
                 <label asp-for="@Model.DataModel.BodyText" class="control-label"></label>
                 <input asp-for="@Model.DataModel.BodyText" class="form-control" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-@*                 <a asp-page="/Members/Index">
-                    <input type="button" value="Cancel" class="btn btn-light" />
-                </a> *@
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
