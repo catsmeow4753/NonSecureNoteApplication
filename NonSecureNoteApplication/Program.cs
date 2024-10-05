@@ -1,7 +1,12 @@
+using NonSecureNoteApplication.Interfaces;
+using NonSecureNoteApplication.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<INoteService, NoteService>();
 
 var app = builder.Build();
 
