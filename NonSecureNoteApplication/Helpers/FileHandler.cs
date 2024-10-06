@@ -12,9 +12,10 @@ namespace NonSecureNoteApplication.Helpers
 			var jsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
 			await File.WriteAllTextAsync($"{filePath}/{data.TitleText}.json", jsonString);
         }
+
         public DataModel ReadJsonAsync(string fileName)
 		{
-            var jsonString = File.ReadAllText($"{filePath}/{fileName}.json");
+            var jsonString = File.ReadAllText($"{fileName}");
             return JsonSerializer.Deserialize<DataModel>(jsonString);
 		}
 	}

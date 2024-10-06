@@ -1,31 +1,64 @@
 ﻿using NonSecureNoteApplication.Helpers;
 using NonSecureNoteApplication.Interfaces;
 using NonSecureNoteApplication.Models;
+using System.IO;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NonSecureNoteApplication.Services
 {
     public class NoteService : INoteService
     {
-        public void CreateNote(DataModel dataModel)
+        private string filePath = @"Data";
+
+        public void CreateNote(DataModel data)
         {
             FileHandler fileHandler = new FileHandler();
-            fileHandler.WriteJsonAsync(dataModel);
+
+            fileHandler.WriteJsonAsync(data);
         }
 
-        public void UpdateNote(string fileName)
+        public void UpdateNote(DataModel data, string newFileName)
         {
         
         }
 
-        public void DeleteNote(string fileName)
+        public bool DeleteNote(DataModel data)
         {
+            string path = $"{filePath}/{data.TitleText}.json";
 
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+
+                Console.WriteLine($"Deleted file: {path}");
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public DataModel GetNote(string fileName)
         {
             FileHandler fileHandler = new FileHandler();
-            return fileHandler.ReadJsonAsync(fileName);
+
+            return fileHandler.ReadJsonAsync($"{filePath}/{fileName}.json");
+        }
+
+        public List<DataModel> GetAllNotes()
+        {
+            FileHandler fileHandler = new FileHandler();
+
+            List<DataModel> noteList = new List<DataModel>();
+
+            foreach (string fileName in Directory.GetFiles(filePath))
+            {
+                noteList.Add(fileHandler.ReadJsonAsync($"{fileName}"));
+            }
+
+            return noteList;
         }
     }
 }
