@@ -13,7 +13,7 @@ namespace NonSecureNoteApplication.Helpers
 			await File.WriteAllTextAsync($"{filePath}/{data.TitleText}.json", jsonString);
         }
 
-        public DataModel ReadJsonAsync(string fileName)
+        public DataModel ReadJson(string fileName)
 		{
             var jsonString = File.ReadAllText($"{fileName}");
             return JsonSerializer.Deserialize<DataModel>(jsonString);

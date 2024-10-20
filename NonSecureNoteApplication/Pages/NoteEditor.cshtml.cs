@@ -11,6 +11,8 @@ namespace NonSecureNoteApplication.Pages
 
         [BindProperty]
         public DataModel DataModel { get; set; }
+
+        [BindProperty]
         public List<DataModel> NoteList { get; set; }
 
         public NoteEditorModel(INoteService noteService)
@@ -18,9 +20,11 @@ namespace NonSecureNoteApplication.Pages
             NoteService = noteService;
         }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(int id)
         {
             NoteList = NoteService.GetAllNotes();
+
+            DataModel = NoteList[id];
 
             return Page();
         }

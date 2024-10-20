@@ -44,7 +44,7 @@ namespace NonSecureNoteApplication.Services
         {
             FileHandler fileHandler = new FileHandler();
 
-            return fileHandler.ReadJsonAsync($"{filePath}/{fileName}.json");
+            return fileHandler.ReadJson($"{filePath}/{fileName}.json");
         }
 
         public List<DataModel> GetAllNotes()
@@ -55,7 +55,7 @@ namespace NonSecureNoteApplication.Services
 
             foreach (string fileName in Directory.GetFiles(filePath))
             {
-                noteList.Add(fileHandler.ReadJsonAsync($"{fileName}"));
+                noteList.Add(fileHandler.ReadJson($"{fileName}"));
             }
 
             return noteList;

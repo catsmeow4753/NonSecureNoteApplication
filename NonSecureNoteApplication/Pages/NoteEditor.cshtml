@@ -42,7 +42,10 @@
                 @Model.NoteList[i].TitleText
             </td>
             <td>
-                <input asp-page-handler="edit" asp-route-id="@i" method="post" type="submit" value="Open" class="btn btn-primary" />
+                @* <input asp-page-handler="edit" asp-route-id="@i" method="post" type="submit" value="Open" class="btn btn-primary" /> *@
+                <a asp-page="/noteeditor" asp-route-id="@i">
+                    <input type="button" value="Open" class="btn btn-light" />
+                </a>
             </td>
         </tr>
     }
