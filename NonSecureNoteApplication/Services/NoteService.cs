@@ -8,7 +8,7 @@ namespace NonSecureNoteApplication.Services
 {
     public class NoteService : INoteService
     {
-        private string filePath = @"Data";
+        private string filePath = @"Data/Notes";
 
         public void CreateNote(DataModel data)
         {

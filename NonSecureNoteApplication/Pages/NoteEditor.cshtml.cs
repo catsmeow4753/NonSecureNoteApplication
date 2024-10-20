@@ -24,7 +24,10 @@ namespace NonSecureNoteApplication.Pages
         {
             NoteList = NoteService.GetAllNotes();
 
-            DataModel = NoteList[id];
+            if (NoteList.Count > 0 )
+            {
+                DataModel = NoteList[id];
+            }
 
             return Page();
         }
@@ -42,15 +45,6 @@ namespace NonSecureNoteApplication.Pages
         public IActionResult OnPostView()
         {
             DataModel = NoteService.GetNote("");
-
-            return Page();
-        }
-
-        public IActionResult OnPostEdit(int id)
-        {
-            DataModel = NoteList[id];
-
-            //NoteService.UpdateNote(DataModel, "");
 
             return Page();
         }

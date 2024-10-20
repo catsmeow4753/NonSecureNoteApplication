@@ -5,7 +5,7 @@ namespace NonSecureNoteApplication.Helpers
 {
     public class FileHandler
     {
-        private string filePath = @"Data";
+        private string filePath = @"Data/Notes";
 
         public async Task WriteJsonAsync(DataModel data)
         {
