@@ -1,68 +1,59 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
-using System.Linq;
+using NonSecureNoteApplication.Interfaces;
+using NonSecureNoteApplication.Models;
 
 namespace NonSecureNoteApplication.Pages
 {
     public class NoteEditorModel : PageModel
     {
-        private static List<Note> _notes = new List<Note>
-    {
-        new Note { Id = 1, Title = "First Note", Body = "This is the body of the first note." },
-        new Note { Id = 2, Title = "Second Note", Body = "This is the body of the second note." },
-        // Add more notes as needed
-    };
+        private INoteService NoteService;
 
-        public List<Note> Notes { get; set; }
+        [BindProperty]
+        public DataModel DataModel { get; set; }
 
-        public void OnGet()
+        [BindProperty]
+        public List<DataModel> NoteList { get; set; }
+
+        public NoteEditorModel(INoteService noteService)
         {
-            Notes = _notes;
+            NoteService = noteService;
         }
 
-        public IActionResult OnPostAddNote([FromBody] NoteUpdateModel newNote)
+        public IActionResult OnGet(int id)
         {
-            var newId = _notes.Max(n => n.Id) + 1; // Generate new ID
-            var note = new Note { Id = newId, Title = newNote.Title, Body = newNote.Body };
-            _notes.Add(note);
+            NoteList = NoteService.GetAllNotes();
 
-            return new JsonResult(note);
-        }
-
-        public IActionResult OnPostEditTitle(int id, [FromBody] NoteUpdateModel update)
-        {
-            var note = _notes.FirstOrDefault(n => n.Id == id);
-            if (note != null)
+            if (NoteList.Count > 0 )
             {
-                note.Title = update.Title;
+                DataModel = NoteList[id];
             }
-            return new JsonResult(note);
+
+            return Page();
         }
 
-        
-        public IActionResult OnPostEditBody(int id, [FromBody] NoteUpdateModel update)
+        public IActionResult OnPost()
         {
-            var note = _notes.FirstOrDefault(n => n.Id == id);
-            if (note != null)
+            if (ModelState.IsValid)
             {
-                note.Body = update.Body;
+                NoteService.CreateNote(DataModel);
             }
-            return new JsonResult(note);
+
+            return Page();
         }
-    }
 
-    public class Note
-    {
-        public int Id { get; set; }
-        public required string Title { get; set; }
-        public required string Body { get; set; }
-    }
+        public IActionResult OnPostView()
+        {
+            DataModel = NoteService.GetNote("");
 
-    public class NoteUpdateModel
-    {
-        
-        public string? Title { get; set; }
-        public string? Body { get; set; }
+            return Page();
+        }
+
+        public IActionResult OnPostDelete()
+        {
+            NoteService.DeleteNote(DataModel);
+
+            return Page();
+        }
     }
 }
